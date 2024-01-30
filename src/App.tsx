@@ -7,19 +7,15 @@ import {Card} from "./components/Card";
 import {Loader} from "./components/Loader";
 
 
-class App extends Component<any, { text: string, cards: Character[], isLoading: boolean, next: boolean, previous: boolean }> {
-    debounceTimeout = null;
+class App extends Component<{}, { text: string, cards: Character[], isLoading: boolean, next: boolean, previous: boolean }> {
+    debounceTimeout:number = 0;
     currentPage = 1;
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: '',
-            cards: [],
-            isLoading: false,
-            next: true,
-            previous: false,
-        }
+    state = {
+        text: '',
+        cards: [],
+        isLoading: false,
+        next: true,
+        previous: false,
     }
 
     componentDidMount() {
@@ -40,14 +36,12 @@ class App extends Component<any, { text: string, cards: Character[], isLoading: 
         })
         return
     }
-
-    componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<{ text: string; cards: Character[]; isLoading: boolean }>, snapshot?: any) {
+    componentDidUpdate(_prevProps: Readonly<{}>, prevState: Readonly<{ text: string; cards: Character[]; isLoading: boolean; next: boolean; previous: boolean }>) {
         if (this.state.text !== prevState.text) {
             this.updateData()
         }
     }
-
-    debounce = (func, delay) => {
+    debounce = (func: () => void, delay: number) => {
         if (this.debounceTimeout) {
             clearTimeout(this.debounceTimeout);
         }
@@ -60,32 +54,32 @@ class App extends Component<any, { text: string, cards: Character[], isLoading: 
                 <div className={'buttons'}>
                     <button
                         disabled={!this.state.previous}
-                            onClick={() => {
-                        this.currentPage -= 1
-                        this.updateData()
-                    }}>
+                        onClick={() => {
+                            this.currentPage -= 1
+                            this.updateData()
+                        }}>
                         Prev
                     </button>
                     <Input
                         onChange={(e) => this.debounce(() => {
-                        this.currentPage = 1;
-                        this.setState({...this.state, text: e.target.value})
-                    }, 1000)}
-                           type={'text'} placeholder={'Search...'}
+                            this.currentPage = 1;
+                            this.setState({...this.state, text: e.target.value})
+                        }, 1000)}
+                        type={'text'} placeholder={'Search...'}
                     />
                     <button
                         disabled={!this.state.next}
-                            onClick={() => {
-                        this.currentPage += 1
-                        this.updateData()
-                    }}>
+                        onClick={() => {
+                            this.currentPage += 1
+                            this.updateData()
+                        }}>
                         Next
                     </button>
                 </div>
                 <div className={'cards'}>
                     {
                         this.state.isLoading ? <Loader/> :
-                            this.state.cards.map((card) => <Card key={card.name} {...card}/>)
+                            this.state.cards.map((card:Character) => <Card key={card.name} {...card}/>)
                     }
                 </div>
             </div>)

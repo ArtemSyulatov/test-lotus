@@ -1,11 +1,9 @@
 import {Component} from "react";
 import classes from './Card.module.css'
+import {Character} from "../../Api/types";
 
 
-export class Card extends Component<Card, never> {
-    constructor(props) {
-        super(props);
-    }
+export class Card extends Component<Character, {}> {
     render() {
         const {name,gender,birth_year,mass,hair_color,skin_color,height} = this.props
         return (
